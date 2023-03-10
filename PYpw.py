@@ -39,9 +39,9 @@ def PwUncode(str1):
             x = DexToHex(x)
         if type(x)== type(123): 
             if x<1000 : 
-                if x>100:
+                if x>=100:
                     revise = 6 - 3
-                elif x>10:
+                elif x>=10:
                     revise = 6 - 2
                 elif x<10:
                     revise = 6 - 1 
@@ -55,7 +55,7 @@ def PwUncode(str1):
         print(x)
         a = a +"|"+ str(x)
         i += 1
-    print("第一次加密内容为"+a)
+    print("字符转化："+a)
     return a
 
 
@@ -111,11 +111,13 @@ def Pwm():
     i = 0
 
     if Pw != False:
+        main_head = 0
         while (len(Pw) > i):
-            main_head = ord(Pw[i])
+            main_head1 = ord(Pw[i])
             i += 1 #每次增加 1 
-            while main_head >= 10 :
-                main_head = main_head -6   #解密时非常重要，请注意运算！
+            main_head = main_head + main_head1
+        while main_head >= 10 :
+            main_head = main_head -6   #解密时非常重要，请注意运算！
     else:
         main_head = create_string_number(6)
     print("main前缀混淆数："+str(main_head))
@@ -123,15 +125,23 @@ def Pwm():
     #main - main
     main_showText = ""
     main_pwText = ""
-    while (len(Pws) > i):
-        main_showText = main_showText +PwUncode(Pws[i+1])
-        main_pwText = main_pwText + create_string_number(Pw)
+    i = 0
+    finally_return = ''
+    while (len(Pws) >= i):
+        try:
+            main_showText = PwUncode(Pws[i+1])#因为Pws前为&：为什么？忘记了
+            for num in main_showText:
+                finally_return = finally_return + num
+                finally_return = finally_return + create_string_number(ord(str(Pw[i])))
+
+        except:break
         i += 1 
 
     
-    print(head_all_+create_string_number(main_head)+"\n完事")
+    print(head_all_+create_string_number(main_head)+finally_return+"\n完事")
     print(head_all_)
     # hexout1 = Pwhex(Pws);
+
 
 
 
